@@ -16,7 +16,7 @@ services:
   job4j_tracker:
     build:
       context: .
-      target: job4j_tracker
+      dockerfile: Dockerfile
     container_name: job4j_tracker
     depends_on:
       - db
