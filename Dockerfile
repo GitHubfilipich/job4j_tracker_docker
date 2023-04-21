@@ -6,7 +6,9 @@ WORKDIR job4j_tracker
 
 COPY . .
 
-RUN mvn liquibase:update -Pdocker
+RUN cat $JDBC_URL
+
+RUN mvn liquibase:update -Pdocker -DJDBC_ULR=$JDBC_URL
 
 RUN mvn package -Dmaven.test.skip=true
 
