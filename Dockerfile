@@ -10,4 +10,4 @@ COPY . .
 
 CMD ["mvn", "liquibase:update", "-Pdocker"]
 
-#CMD ["java", "-jar", "target/tracker.jar"]
+CMD ["java", "-jar", "target/tracker.jar"]
