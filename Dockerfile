@@ -6,9 +6,7 @@ WORKDIR job4j_tracker
 
 COPY . .
 
-ENV JDBC_URL ${JDBC_URL}
-
-RUN cat $JDBC_URL
+RUN echo $JDBC_URL
 
 RUN mvn liquibase:update -Pdocker
 
