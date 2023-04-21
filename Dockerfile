@@ -6,8 +6,8 @@ WORKDIR job4j_tracker
 
 COPY . .
 
-RUN mvn install
+RUN mvn liquibase:update -Pdocker
 
-RUN mvn liquibase:update -Pproduction -Dliquibase.url=$JDBC_URL_PSQLDB
+RUN mvn package -Dmaven.test.skip=true
 
 CMD ["java", "-jar", "target/tracker.jar"]
