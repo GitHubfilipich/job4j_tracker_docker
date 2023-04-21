@@ -18,5 +18,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: job4j_tracker
+    environment:
+      - JDBC_URL_PSQLDB=jdbc:postgresql://db:5432/tracker
     depends_on:
       - db

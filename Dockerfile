@@ -8,6 +8,6 @@ COPY . .
 
 RUN mvn install
 
-RUN mvn -Pproduction liquibase:update
+RUN mvn liquibase:update -Pproduction -Dliquibase.url=$JDBC_URL_PSQLDB
 
 CMD ["java", "-jar", "target/tracker.jar"]
