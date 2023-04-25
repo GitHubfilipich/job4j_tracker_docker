@@ -7,6 +7,13 @@ import ru.job4j.tracker.input.ValidateInput;
 import ru.job4j.tracker.store.SqlTracker;
 import ru.job4j.tracker.store.Store;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Properties;
+
 public class StartUI {
 
     public void init(Input input, Store tracker, UserAction[] actions) {
@@ -26,13 +33,40 @@ public class StartUI {
         }
     }
 
+    private static String loadSysEnvIfNullThenConfig(String sysEnv, String key, Properties config) {
+        String value = System.getenv(sysEnv);
+        if (value == null) {
+            value = config.getProperty(key);
+        }
+        return value;
+    }
+
+    private static Connection loadConnection() throws ClassNotFoundException, SQLException {
+        var config = new Properties();
+        try (InputStream in = StartUI.class.getClassLoader()
+                .getResourceAsStream("app.properties")) {
+            config.load(in);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+        String url = loadSysEnvIfNullThenConfig("JDBC_URL", "driver-class-name", config);
+        String username = loadSysEnvIfNullThenConfig("JDBC_USERNAME", "username", config);
+        String password = loadSysEnvIfNullThenConfig("JDBC_PASSWORD", "password", config);
+        String driver = loadSysEnvIfNullThenConfig("JDBC_DRIVER", "driver", config);
+        Class.forName(driver);
+        return DriverManager.getConnection(
+                config.getProperty(url),
+                config.getProperty(username),
+                config.getProperty(password)
+        );
+    }
 
     public static void main(String[] args) {
         Input validate = new ValidateInput(
                 new ConsoleInput()
         );
-        try (Store tracker = new SqlTracker()) {
-            tracker.init();
+        try (Connection connection = loadConnection()) {
+            Store tracker = new SqlTracker(connection);
             UserAction[] actions = {
                     new CreateAction(),
                     new ReplaceAction(),
