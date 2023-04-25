@@ -34,7 +34,7 @@ public class StartUI {
     }
 
     private static String loadSysEnvIfNullThenConfig(String sysEnv, String key, Properties config) {
-        String value = System.getProperty(sysEnv);
+        String value = System.getenv(sysEnv);
         if (value == null) {
             value = config.getProperty(key);
         }
