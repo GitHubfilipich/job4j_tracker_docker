@@ -34,7 +34,7 @@ public class StartUI {
     }
 
     private static String loadSysEnvIfNullThenConfig(String sysEnv, String key, Properties config) {
-        String value = System.getenv(sysEnv);
+        String value = System.getProperty(sysEnv);
         if (value == null) {
             value = config.getProperty(key);
         }
@@ -55,9 +55,7 @@ public class StartUI {
         String driver = loadSysEnvIfNullThenConfig("JDBC_DRIVER", "driver", config);
         Class.forName(driver);
         return DriverManager.getConnection(
-                config.getProperty(url),
-                config.getProperty(username),
-                config.getProperty(password)
+                url, username, password
         );
     }
 
