@@ -49,10 +49,11 @@ public class StartUI {
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
-        String url = loadSysEnvIfNullThenConfig("JDBC_URL", "driver-class-name", config);
+        String url = loadSysEnvIfNullThenConfig("JDBC_URL", "url", config);
         String username = loadSysEnvIfNullThenConfig("JDBC_USERNAME", "username", config);
         String password = loadSysEnvIfNullThenConfig("JDBC_PASSWORD", "password", config);
-        String driver = loadSysEnvIfNullThenConfig("JDBC_DRIVER", "driver", config);
+        String driver = loadSysEnvIfNullThenConfig("JDBC_DRIVER", "driver-class-name", config);
+        System.out.println("url=" + url);
         Class.forName(driver);
         return DriverManager.getConnection(
                 url, username, password
